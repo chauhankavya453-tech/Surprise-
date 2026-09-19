@@ -4,87 +4,231 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f1ec">
-  <meta name="description" content="An interactive wedding invitation for Anika and Arjun.">
-  <title>Our Wedding Invitation · Anika &amp; Arjun</title>
+  <title>Apeksha &amp; Abhinav · Wedding Invitation</title>
   <style>
-    :root { --ink:#3f3535; --muted:#857776; --rose:#b87978; --deep:#925e61; --paper:#fffdf9; --line:rgba(111,75,72,.18); --ease:cubic-bezier(.22,1,.36,1); }
-    * { box-sizing:border-box; }
-    html,body { min-height:100%; }
-    body { margin:0; color:var(--ink); font-family:Georgia,'Times New Roman',serif; background:radial-gradient(circle at 15% 12%,rgba(255,255,255,.92),transparent 29rem),radial-gradient(circle at 92% 90%,rgba(235,191,184,.38),transparent 30rem),#f7f1ec; overflow-x:hidden; }
-    .page { min-height:100svh; display:grid; place-items:center; padding:clamp(1.25rem,4vw,3rem); isolation:isolate; }
-    .invitation { width:min(100%,54rem); text-align:center; }
-    .eyebrow { margin:0 0 .65rem; color:var(--deep); font:600 .69rem/1.2 system-ui,sans-serif; letter-spacing:.24em; text-transform:uppercase; }
-    h1 { margin:0; font-size:clamp(2.15rem,6vw,4.4rem); font-weight:400; line-height:.98; letter-spacing:-.04em; }
-    .intro { margin:.9rem auto 0; color:var(--muted); font-size:clamp(.95rem,2vw,1.1rem); }
-    .stage { min-height:clamp(30rem,72vh,42rem); display:grid; place-items:center; perspective:1700px; position:relative; }
-    .scene { width:min(88vw,35rem); aspect-ratio:1.52; position:relative; transform-style:preserve-3d; cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .5s var(--ease); }
-    .scene:hover { transform:translateY(-5px); }
-    .scene:focus-visible { outline:3px solid var(--rose); outline-offset:12px; border-radius:1rem; }
+    :root {
+      --ease: cubic-bezier(.22, 1, .36, 1);
+      --rose: #925e61;
+    }
 
-    /* The invitation itself is a true 5 x 7 inch portrait card when closed. */
-    .book { position:absolute; z-index:2; top:50%; left:50%; width:min(90vw,700px); aspect-ratio:10 / 7; transform:translate(-50%,-50%) translateY(35%) scale(.78); transform-style:preserve-3d; opacity:0; filter:drop-shadow(0 24px 35px rgba(87,53,53,.2)); transition:transform 1.45s var(--ease),opacity .7s ease; pointer-events:none; }
-    .page-panel { position:absolute; top:0; width:50%; height:100%; overflow:hidden; background:var(--paper); border:1px solid rgba(125,79,77,.15); }
-    .page-panel::before { content:''; position:absolute; inset:clamp(.45rem,1.5vw,.9rem); border:1px solid var(--line); pointer-events:none; }
-    .page-left { left:0; border-radius:.35rem 0 0 .35rem; transform-origin:right center; transform:rotateY(90deg); transition:transform 1.35s var(--ease); }
-    .page-right { right:0; border-radius:0 .35rem .35rem 0; transform-origin:left center; transform:rotateY(-90deg); transition:transform 1.35s var(--ease); }
-    .page-content { position:relative; height:100%; padding:clamp(1rem,3vw,2rem); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-    .page-content h2 { margin:.45rem 0 .3rem; font-size:clamp(1.65rem,5vw,3.15rem); font-weight:400; letter-spacing:-.055em; }
-    .ornament { color:var(--rose); font-size:clamp(.8rem,2vw,1.2rem); letter-spacing:.35em; margin-left:.35em; }
-    .script { color:var(--deep); font-style:italic; font-size:clamp(.72rem,1.9vw,1.1rem); }
-    .date { margin:1rem 0 .45rem; color:var(--muted); font:600 clamp(.5rem,1.25vw,.68rem)/1.2 system-ui,sans-serif; letter-spacing:.14em; text-transform:uppercase; }
-    .place { margin:0; font-size:clamp(.65rem,1.7vw,.95rem); line-height:1.4; }
-    .details { margin-top:.8rem; color:var(--deep); font-size:clamp(.6rem,1.5vw,.84rem); }
-    .book::after { content:''; position:absolute; z-index:10; left:50%; top:0; width:1px; height:100%; background:rgba(92,61,61,.15); box-shadow:1px 0 3px rgba(0,0,0,.06); opacity:0; transition:opacity .5s ease; }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(255,255,255,.9), transparent 28rem),
+        radial-gradient(circle at 90% 90%, rgba(235,191,184,.4), transparent 30rem),
+        #f7f1ec;
+    }
 
-    /* Envelope */
-    .envelope { position:absolute; inset:0; z-index:4; transform-style:preserve-3d; filter:drop-shadow(0 26px 70px rgba(87,53,53,.18)); transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease); }
-    .envelope__body { position:absolute; inset:0; overflow:hidden; border-radius:.55rem; background:linear-gradient(145deg,#efcfc8,#e6bdb9); box-shadow:inset 0 0 0 1px rgba(126,75,75,.12); }
-    .envelope__body::before,.envelope__body::after { content:''; position:absolute; inset:0; pointer-events:none; }
-    .envelope__body::before { background:linear-gradient(145deg,transparent 49.7%,rgba(128,75,76,.18) 50%,transparent 50.4%); clip-path:polygon(0 0,50% 53%,100% 0,100% 100%,0 100%); }
-    .envelope__body::after { background:linear-gradient(35deg,transparent 49.7%,rgba(128,75,76,.12) 50%,transparent 50.4%); clip-path:polygon(0 100%,50% 47%,100% 100%); }
-    .flap { position:absolute; z-index:3; top:0; left:0; width:100%; height:61%; transform-origin:50% 0; clip-path:polygon(0 0,100% 0,50% 100%); background:linear-gradient(150deg,#f6ddd6,#e4b7b3); box-shadow:0 1px 0 rgba(112,68,68,.12); transition:transform 1.05s var(--ease); }
-    .seal { position:absolute; z-index:5; left:50%; top:54%; width:clamp(2.9rem,10vw,3.7rem); aspect-ratio:1; display:grid; place-items:center; transform:translate(-50%,-50%); border-radius:50%; color:#fffaf6; background:var(--deep); border:.28rem solid rgba(255,255,255,.22); box-shadow:0 5px 13px rgba(100,57,57,.2); font-size:1rem; transition:opacity .35s ease,transform .65s var(--ease); }
-    .hint { margin:-1.2rem 0 0; color:var(--muted); font:.72rem system-ui,sans-serif; letter-spacing:.13em; text-transform:uppercase; transition:opacity .4s ease; }
+    .page {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 1rem;
+    }
 
-    /* One click: flap opens, 5x7 card emerges, then the book unfolds. */
-    .is-open .flap { transform:rotateX(180deg); z-index:1; }
-    .is-open .seal { opacity:0; transform:translate(-50%,-50%) scale(.5) rotate(20deg); pointer-events:none; }
-    .is-open .book { opacity:1; transform:translate(-50%,-50%) translateY(-48%) scale(1); transition-delay:.35s; }
-    .is-open .page-left { transform:rotateY(0deg); transition-delay:1.65s; }
-    .is-open .page-right { transform:rotateY(0deg); transition-delay:1.65s; }
-    .is-open .book::after { opacity:1; transition-delay:2.8s; }
-    .is-open .envelope { opacity:0; transform:translateY(45%) scale(.82); filter:blur(4px) drop-shadow(0 26px 70px rgba(87,53,53,.18)); transition-delay:1.05s; pointer-events:none; }
-    .is-open .hint { opacity:0; }
-    .is-open .scene { cursor:default; }
-    @media (max-width:520px) { .stage { min-height:28rem; } .scene { width:90vw; } .book { width:92vw; } }
-    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; scroll-behavior:auto!important; } }
+    .stage {
+      width: min(92vw, 35rem);
+      aspect-ratio: 1.52;
+      position: relative;
+      display: grid;
+      place-items: center;
+      perspective: 1700px;
+    }
+
+    .scene {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .scene:focus-visible {
+      outline: 3px solid rgba(146,94,97,.65);
+      outline-offset: 12px;
+      border-radius: 1rem;
+    }
+
+    /* The artwork is the card itself: portrait 5:7 ratio, centered in the envelope. */
+    .invitation-card {
+      position: absolute;
+      z-index: 2;
+      top: 50%;
+      left: 50%;
+      width: min(68%, 18rem);
+      aspect-ratio: 5 / 7;
+      transform: translate(-50%, -50%) translateY(38%) scale(.94);
+      transform-style: preserve-3d;
+      opacity: 0;
+      overflow: hidden;
+      border-radius: .25rem;
+      background: #fffdf9;
+      box-shadow: 0 25px 45px rgba(70,40,40,.24);
+      transition: transform 1.45s var(--ease), opacity .65s ease;
+      pointer-events: none;
+    }
+
+    .invitation-card img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .envelope {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 26px 55px rgba(87,53,53,.2));
+      transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease);
+    }
+
+    .envelope-body {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: .55rem;
+      background: linear-gradient(145deg, #efcfc8, #e6bdb9);
+      box-shadow: inset 0 0 0 1px rgba(126,75,75,.12);
+    }
+
+    .envelope-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, transparent 49.7%, rgba(128,75,76,.18) 50%, transparent 50.4%);
+      clip-path: polygon(0 0, 50% 53%, 100% 0, 100% 100%, 0 100%);
+    }
+
+    .envelope-body::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(35deg, transparent 49.7%, rgba(128,75,76,.12) 50%, transparent 50.4%);
+      clip-path: polygon(0 100%, 50% 47%, 100% 100%);
+    }
+
+    .flap {
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 61%;
+      transform-origin: 50% 0;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background: linear-gradient(150deg, #f6ddd6, #e4b7b3);
+      box-shadow: 0 1px 0 rgba(112,68,68,.12);
+      transition: transform 1.05s var(--ease);
+    }
+
+    .seal {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: 54%;
+      width: clamp(2.9rem, 10vw, 3.7rem);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      color: #fffaf6;
+      background: var(--rose);
+      border: .28rem solid rgba(255,255,255,.22);
+      box-shadow: 0 5px 13px rgba(100,57,57,.2);
+      font: 1rem Georgia, serif;
+      transition: opacity .35s ease, transform .65s var(--ease);
+    }
+
+    /* One click: open envelope, reveal the centered artwork, then fade the envelope away. */
+    .scene.is-open .flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .scene.is-open .seal {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.5) rotate(20deg);
+      pointer-events: none;
+    }
+
+    .scene.is-open .invitation-card {
+      opacity: 1;
+      transform: translate(-50%, -50%) translateY(-39%) scale(1);
+      transition-delay: .35s;
+    }
+
+    .scene.is-open .envelope {
+      opacity: 0;
+      transform: translateY(45%) scale(.82);
+      filter: blur(4px) drop-shadow(0 26px 55px rgba(87,53,53,.2));
+      transition-delay: 1.05s;
+      pointer-events: none;
+    }
+
+    @media (max-width: 520px) {
+      .stage { width: 92vw; }
+      .invitation-card { width: 67%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="page">
-    <section class="invitation" aria-labelledby="title">
-      <p class="eyebrow">A little something special</p>
-      <h1 id="title">You’re invited</h1>
-      <p class="intro">Tap the envelope to open our wedding invitation</p>
-      <div class="stage">
-        <div class="scene" id="scene" role="button" tabindex="0" aria-label="Open the wedding invitation" aria-pressed="false">
-          <article class="book" aria-hidden="true">
-            <section class="page-panel page-left"><div class="page-content"><div class="ornament">✦ ✦ ✦</div><div class="script">Together with their families</div><h2>Anika<br><span>&amp;</span><br>Arjun</h2><div class="script">request the pleasure of your company</div></div></section>
-            <section class="page-panel page-right"><div class="page-content"><div class="script">Saturday · 12 October 2025 · 5:30 PM</div><p class="date">The celebration</p><p class="place">The Garden Pavilion<br>Jaipur, Rajasthan</p><p class="details">Dinner &amp; dancing to follow</p><div class="ornament">♡</div></div></section>
-          </article>
-          <div class="envelope" aria-hidden="true"><div class="envelope__body"></div><div class="flap"></div><div class="seal">A <span>♥</span> A</div></div>
+    <div class="stage">
+      <div
+        class="scene"
+        id="scene"
+        role="button"
+        tabindex="0"
+        aria-label="Open the wedding invitation"
+        aria-pressed="false"
+      >
+        <article class="invitation-card" aria-hidden="true">
+          <img src="assets/wedding-cover.jpg" alt="The wedding of Apeksha and Abhinav">
+        </article>
+
+        <div class="envelope" aria-hidden="true">
+          <div class="envelope-body"></div>
+          <div class="flap"></div>
+          <div class="seal">♥</div>
         </div>
       </div>
-      <p class="hint" aria-live="polite">Click or tap to open</p>
-    </section>
+    </div>
   </main>
+
   <script>
     (() => {
       const scene = document.getElementById('scene');
-      const book = scene.querySelector('.book');
-      const open = () => { if (scene.classList.contains('is-open')) return; scene.classList.add('is-open'); scene.setAttribute('aria-pressed','true'); book.setAttribute('aria-hidden','false'); };
-      scene.addEventListener('click', open);
-      scene.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); } });
+      const card = scene.querySelector('.invitation-card');
+
+      const openInvitation = () => {
+        if (scene.classList.contains('is-open')) return;
+        scene.classList.add('is-open');
+        scene.setAttribute('aria-pressed', 'true');
+        card.setAttribute('aria-hidden', 'false');
+      };
+
+      scene.addEventListener('click', openInvitation);
+      scene.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openInvitation();
+        }
+      });
     })();
   </script>
 </body>
