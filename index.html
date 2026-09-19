@@ -4,45 +4,112 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f7f1ec">
+  <meta name="description" content="An interactive wedding invitation for Apeksha and Abhinav.">
   <title>Apeksha &amp; Abhinav · Wedding Invitation</title>
   <style>
-    :root { --ease:cubic-bezier(.22,1,.36,1); --rose:#925e61; }
-    * { box-sizing:border-box; }
-    html,body { min-height:100%; }
-    body { margin:0; overflow:hidden; background:radial-gradient(circle at 15% 10%,rgba(255,255,255,.9),transparent 28rem),radial-gradient(circle at 90% 90%,rgba(235,191,184,.4),transparent 30rem),#f7f1ec; }
-    .page { min-height:100svh; display:grid; place-items:center; padding:1rem; }
-    .stage { width:min(92vw,35rem); aspect-ratio:1.52; position:relative; display:grid; place-items:center; perspective:1700px; }
-    .scene { width:100%; height:100%; position:relative; transform-style:preserve-3d; cursor:pointer; -webkit-tap-highlight-color:transparent; }
-    .scene:focus-visible { outline:3px solid rgba(146,94,97,.65); outline-offset:12px; border-radius:1rem; }
+    :root {
+      --paper: #fffdf8;
+      --rose: #aa6870;
+      --rose-dark: #75454c;
+      --ink: #3d3031;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+      --book-shadow: 0 28px 55px rgba(74, 42, 45, .22);
+    }
 
-    /* The uploaded artwork is the invitation itself, not a separate text card. */
-    .invitation-card { position:absolute; z-index:2; top:50%; left:50%; width:min(68%,18rem); aspect-ratio:5 / 7; transform:translate(-50%,-50%) translateY(52%) scale(.94); opacity:0; overflow:hidden; border-radius:.25rem; background:#fffdf9; box-shadow:0 25px 45px rgba(70,40,40,.24); transition:transform 1.5s var(--ease),opacity .7s ease; pointer-events:none; }
-    .invitation-card img { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 14% 10%, rgba(255,255,255,.92), transparent 28rem),
+        radial-gradient(circle at 88% 88%, rgba(235,191,184,.45), transparent 30rem),
+        #f7f1ec;
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+    }
 
-    .envelope { position:absolute; inset:0; z-index:4; transform-style:preserve-3d; filter:drop-shadow(0 26px 55px rgba(87,53,53,.2)); transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease); }
-    .envelope-body { position:absolute; inset:0; overflow:hidden; border-radius:.55rem; background:linear-gradient(145deg,#efcfc8,#e6bdb9); box-shadow:inset 0 0 0 1px rgba(126,75,75,.12); }
-    .envelope-body::before { content:''; position:absolute; inset:0; background:linear-gradient(145deg,transparent 49.7%,rgba(128,75,76,.18) 50%,transparent 50.4%); clip-path:polygon(0 0,50% 53%,100% 0,100% 100%,0 100%); }
-    .envelope-body::after { content:''; position:absolute; inset:0; background:linear-gradient(35deg,transparent 49.7%,rgba(128,75,76,.12) 50%,transparent 50.4%); clip-path:polygon(0 100%,50% 47%,100% 100%); }
-    .flap { position:absolute; z-index:3; top:0; left:0; width:100%; height:61%; transform-origin:50% 0; clip-path:polygon(0 0,100% 0,50% 100%); background:linear-gradient(150deg,#f6ddd6,#e4b7b3); box-shadow:0 1px 0 rgba(112,68,68,.12); transition:transform 1.05s var(--ease); }
-    .seal { position:absolute; z-index:5; left:50%; top:54%; width:clamp(2.9rem,10vw,3.7rem); aspect-ratio:1; display:grid; place-items:center; transform:translate(-50%,-50%); border-radius:50%; color:#fffaf6; background:var(--rose); border:.28rem solid rgba(255,255,255,.22); box-shadow:0 5px 13px rgba(100,57,57,.2); font:1rem Georgia,serif; transition:opacity .35s ease,transform .65s var(--ease); }
+    .page { min-height: 100svh; display: grid; place-items: center; padding: 1rem; }
+    .stage { width: min(94vw, 42rem); height: min(88svh, 40rem); display: grid; place-items: center; perspective: 1800px; }
+    .scene { position: relative; width: min(92vw, 36rem); height: min(76vw, 27rem); min-height: 16rem; transform-style: preserve-3d; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .scene:focus-visible { outline: 3px solid rgba(117,69,76,.65); outline-offset: 12px; border-radius: 1rem; }
 
-    /* One click: open the flap, slide the artwork upward from inside, then fade the envelope. */
+    /* Envelope */
+    .envelope { position: absolute; inset: 0; z-index: 10; transform-style: preserve-3d; filter: drop-shadow(0 28px 55px rgba(87,53,53,.2)); transition: opacity .85s var(--ease), transform .9s var(--ease), filter .9s var(--ease); }
+    .envelope-body { position: absolute; inset: 0; overflow: hidden; border-radius: .65rem; background: linear-gradient(145deg,#f0d1ca,#e2b5b1); box-shadow: inset 0 0 0 1px rgba(126,75,75,.14); }
+    .envelope-body::before { content:''; position:absolute; inset:0; background: linear-gradient(145deg,transparent 49.7%,rgba(128,75,76,.2) 50%,transparent 50.4%); clip-path: polygon(0 0,50% 53%,100% 0,100% 100%,0 100%); }
+    .envelope-body::after { content:''; position:absolute; inset:0; background:linear-gradient(35deg,transparent 49.7%,rgba(128,75,76,.14) 50%,transparent 50.4%); clip-path:polygon(0 100%,50% 47%,100% 100%); }
+    .flap { position:absolute; z-index:3; inset:0 0 auto; height:61%; transform-origin:50% 0; clip-path:polygon(0 0,100% 0,50% 100%); background:linear-gradient(150deg,#f7e0da,#e2b4b0); box-shadow:0 1px 0 rgba(112,68,68,.14); transition:transform 1.05s var(--ease); }
+    .seal { position:absolute; z-index:5; left:50%; top:54%; width:clamp(2.8rem,10vw,3.7rem); aspect-ratio:1; display:grid; place-items:center; transform:translate(-50%,-50%); border-radius:50%; color:#fffaf6; background:var(--rose-dark); border:.28rem solid rgba(255,255,255,.24); box-shadow:0 5px 13px rgba(100,57,57,.2); font-size:1.05rem; transition:opacity .35s ease,transform .65s var(--ease); }
+
+    /* Open-book geometry. The spread is always centered; only its visibility changes. */
+    .book { position:absolute; z-index:2; left:50%; top:50%; width:min(92vw,36rem); aspect-ratio:10 / 7; transform:translate(-50%,-50%) scale(.78); transform-style:preserve-3d; opacity:0; filter:drop-shadow(var(--book-shadow)); transition:transform 1.2s var(--ease), opacity .6s ease; pointer-events:none; }
+    .spread { position:absolute; inset:0; display:flex; transform-style:preserve-3d; }
+    .spread-page { position:relative; width:50%; height:100%; overflow:hidden; background:var(--paper); border:1px solid rgba(117,69,76,.16); backface-visibility:hidden; }
+    .spread-left { border-radius:.4rem 0 0 .4rem; }
+    .spread-right { border-radius:0 .4rem .4rem 0; }
+    .spread-page::after { content:''; position:absolute; inset:.55rem; border:1px solid rgba(117,69,76,.16); pointer-events:none; }
+    .spread-left::before, .spread-right::before { content:''; position:absolute; top:0; bottom:0; width:12%; z-index:2; pointer-events:none; opacity:.42; }
+    .spread-left::before { right:0; background:linear-gradient(to left,rgba(63,35,37,.16),transparent); }
+    .spread-right::before { left:0; background:linear-gradient(to right,rgba(63,35,37,.16),transparent); }
+    .page-image { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
+
+    /* The physical front cover is a 5:7 portrait sheet hinged on its right edge. */
+    .cover-sheet { position:absolute; z-index:6; top:0; left:25%; width:50%; height:100%; transform-origin:right center; transform:rotateY(0deg); transform-style:preserve-3d; transition:transform 1.35s var(--ease); }
+    .cover-face { position:absolute; inset:0; overflow:hidden; background:var(--paper); border:1px solid rgba(117,69,76,.18); backface-visibility:hidden; }
+    .cover-front { border-radius:.4rem; }
+    .cover-back { transform:rotateY(180deg); border-radius:.4rem 0 0 .4rem; }
+    .cover-face img { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
+
+    /* A second sheet turns from the center hinge, exposing the final love 2 page. */
+    .turn-sheet { position:absolute; z-index:5; top:0; left:50%; width:50%; height:100%; transform-origin:left center; transform:rotateY(0deg); transform-style:preserve-3d; transition:transform 1.25s var(--ease); }
+    .turn-face { position:absolute; inset:0; overflow:hidden; background:var(--paper); border:1px solid rgba(117,69,76,.16); backface-visibility:hidden; }
+    .turn-front { border-radius:0 .4rem .4rem 0; }
+    .turn-back { transform:rotateY(180deg); border-radius:.4rem 0 0 .4rem; }
+    .turn-face img { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
+
     .scene.is-open .flap { transform:rotateX(180deg); z-index:1; }
     .scene.is-open .seal { opacity:0; transform:translate(-50%,-50%) scale(.5) rotate(20deg); pointer-events:none; }
-    .scene.is-open .invitation-card { opacity:1; transform:translate(-50%,-50%) translateY(-42%) scale(1); transition-delay:.25s; z-index:5; }
-    .scene.is-open .envelope { opacity:0; transform:translateY(45%) scale(.82); filter:blur(4px) drop-shadow(0 26px 55px rgba(87,53,53,.2)); transition-delay:1.05s; pointer-events:none; }
-    .scene.is-open { cursor:default; }
-    @media (max-width:520px) { .stage { width:92vw; } .invitation-card { width:67%; } }
-    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+    .scene.is-open .book { opacity:1; transform:translate(-50%,-50%) scale(.78); transition-delay:.25s; }
+    .scene.is-open .envelope { opacity:0; transform:translateY(45%) scale(.82); filter:blur(4px); transition-delay:1.05s; pointer-events:none; }
+
+    /* Page 2: front cover swings open, revealing love 3 / love 2. */
+    .scene.is-spread .book { transform:translate(-50%,-50%) scale(1); }
+    .scene.is-spread .cover-sheet { transform:rotateY(-180deg); transition-delay:.12s; }
+    /* Page 3: the right sheet turns like a real page; love 2 remains the final page. */
+    .scene.is-final .turn-sheet { transform:rotateY(-180deg); transition-delay:.08s; }
+
+    @media (max-width: 560px) {
+      .stage { width:100vw; height:86svh; }
+      .scene { width:92vw; height:clamp(16rem,64vw,24rem); }
+      .book { width:92vw; }
+    }
+    @media (orientation: landscape) and (max-height: 560px) {
+      .stage { height:94svh; }
+      .scene { height:78svh; width:min(86vw,36rem); }
+    }
+    @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="stage">
-      <div class="scene" id="scene" role="button" tabindex="0" aria-label="Open the wedding invitation" aria-pressed="false">
-        <article class="invitation-card" aria-hidden="true">
-          <img src="assets/wedding-cover.jpg" alt="The wedding of Apeksha and Abhinav">
-        </article>
+      <div id="scene" class="scene" role="button" tabindex="0" aria-label="Open wedding invitation" aria-pressed="false">
+        <div class="book" aria-hidden="true">
+          <div class="spread">
+            <div class="spread-page spread-left"><img class="page-image" src="love%203%20.png" alt="Inside left wedding invitation page"></div>
+            <div class="spread-page spread-right"><img class="page-image" src="love%202%20.png" alt="Inside right wedding invitation page"></div>
+          </div>
+          <div class="cover-sheet">
+            <div class="cover-face cover-front"><img src="love%201%20.png" alt="Wedding invitation front cover"></div>
+            <div class="cover-face cover-back"><img src="love%203%20.png" alt="Wedding invitation inside left page"></div>
+          </div>
+          <div class="turn-sheet">
+            <div class="turn-face turn-front"><img src="love%202%20.png" alt="Wedding invitation inside right page"></div>
+            <div class="turn-face turn-back"><img src="love%202%20.png" alt="Wedding invitation final page"></div>
+          </div>
+        </div>
+
         <div class="envelope" aria-hidden="true">
           <div class="envelope-body"></div>
           <div class="flap"></div>
@@ -51,21 +118,39 @@
       </div>
     </div>
   </main>
+
   <script>
     (() => {
       const scene = document.getElementById('scene');
-      const card = scene.querySelector('.invitation-card');
-      const openInvitation = () => {
-        if (scene.classList.contains('is-open')) return;
-        scene.classList.add('is-open');
-        scene.setAttribute('aria-pressed', 'true');
-        card.setAttribute('aria-hidden', 'false');
+      let step = 0;
+      let locked = false;
+
+      const next = () => {
+        if (locked || step >= 3) return;
+        locked = true;
+        step += 1;
+
+        if (step === 1) {
+          scene.classList.add('is-open');
+          scene.setAttribute('aria-label', 'Open the wedding invitation card');
+          window.setTimeout(() => { locked = false; }, 1700);
+        } else if (step === 2) {
+          scene.classList.add('is-spread');
+          scene.setAttribute('aria-label', 'Turn to the final invitation page');
+          window.setTimeout(() => { locked = false; }, 1500);
+        } else {
+          scene.classList.add('is-final');
+          scene.setAttribute('aria-label', 'Final wedding invitation page');
+          window.setTimeout(() => { locked = false; }, 1400);
+        }
+        scene.setAttribute('aria-pressed', step > 0 ? 'true' : 'false');
       };
-      scene.addEventListener('click', openInvitation);
+
+      scene.addEventListener('click', next);
       scene.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          openInvitation();
+          next();
         }
       });
     })();
