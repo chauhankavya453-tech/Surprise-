@@ -6,201 +6,43 @@
   <meta name="theme-color" content="#f7f1ec">
   <title>Apeksha &amp; Abhinav · Wedding Invitation</title>
   <style>
-    :root {
-      --ease: cubic-bezier(.22, 1, .36, 1);
-      --rose: #925e61;
-    }
+    :root { --ease:cubic-bezier(.22,1,.36,1); --rose:#925e61; }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; }
+    body { margin:0; overflow:hidden; background:radial-gradient(circle at 15% 10%,rgba(255,255,255,.9),transparent 28rem),radial-gradient(circle at 90% 90%,rgba(235,191,184,.4),transparent 30rem),#f7f1ec; }
+    .page { min-height:100svh; display:grid; place-items:center; padding:1rem; }
+    .stage { width:min(92vw,35rem); aspect-ratio:1.52; position:relative; display:grid; place-items:center; perspective:1700px; }
+    .scene { width:100%; height:100%; position:relative; transform-style:preserve-3d; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+    .scene:focus-visible { outline:3px solid rgba(146,94,97,.65); outline-offset:12px; border-radius:1rem; }
 
-    * { box-sizing: border-box; }
-    html, body { min-height: 100%; }
-    body {
-      margin: 0;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 15% 10%, rgba(255,255,255,.9), transparent 28rem),
-        radial-gradient(circle at 90% 90%, rgba(235,191,184,.4), transparent 30rem),
-        #f7f1ec;
-    }
+    /* The uploaded artwork is the invitation itself, not a separate text card. */
+    .invitation-card { position:absolute; z-index:2; top:50%; left:50%; width:min(68%,18rem); aspect-ratio:5 / 7; transform:translate(-50%,-50%) translateY(52%) scale(.94); opacity:0; overflow:hidden; border-radius:.25rem; background:#fffdf9; box-shadow:0 25px 45px rgba(70,40,40,.24); transition:transform 1.5s var(--ease),opacity .7s ease; pointer-events:none; }
+    .invitation-card img { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
 
-    .page {
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      padding: 1rem;
-    }
+    .envelope { position:absolute; inset:0; z-index:4; transform-style:preserve-3d; filter:drop-shadow(0 26px 55px rgba(87,53,53,.2)); transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease); }
+    .envelope-body { position:absolute; inset:0; overflow:hidden; border-radius:.55rem; background:linear-gradient(145deg,#efcfc8,#e6bdb9); box-shadow:inset 0 0 0 1px rgba(126,75,75,.12); }
+    .envelope-body::before { content:''; position:absolute; inset:0; background:linear-gradient(145deg,transparent 49.7%,rgba(128,75,76,.18) 50%,transparent 50.4%); clip-path:polygon(0 0,50% 53%,100% 0,100% 100%,0 100%); }
+    .envelope-body::after { content:''; position:absolute; inset:0; background:linear-gradient(35deg,transparent 49.7%,rgba(128,75,76,.12) 50%,transparent 50.4%); clip-path:polygon(0 100%,50% 47%,100% 100%); }
+    .flap { position:absolute; z-index:3; top:0; left:0; width:100%; height:61%; transform-origin:50% 0; clip-path:polygon(0 0,100% 0,50% 100%); background:linear-gradient(150deg,#f6ddd6,#e4b7b3); box-shadow:0 1px 0 rgba(112,68,68,.12); transition:transform 1.05s var(--ease); }
+    .seal { position:absolute; z-index:5; left:50%; top:54%; width:clamp(2.9rem,10vw,3.7rem); aspect-ratio:1; display:grid; place-items:center; transform:translate(-50%,-50%); border-radius:50%; color:#fffaf6; background:var(--rose); border:.28rem solid rgba(255,255,255,.22); box-shadow:0 5px 13px rgba(100,57,57,.2); font:1rem Georgia,serif; transition:opacity .35s ease,transform .65s var(--ease); }
 
-    .stage {
-      width: min(92vw, 35rem);
-      aspect-ratio: 1.52;
-      position: relative;
-      display: grid;
-      place-items: center;
-      perspective: 1700px;
-    }
-
-    .scene {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .scene:focus-visible {
-      outline: 3px solid rgba(146,94,97,.65);
-      outline-offset: 12px;
-      border-radius: 1rem;
-    }
-
-    /* The artwork is the card itself: portrait 5:7 ratio, centered in the envelope. */
-    .invitation-card {
-      position: absolute;
-      z-index: 2;
-      top: 50%;
-      left: 50%;
-      width: min(68%, 18rem);
-      aspect-ratio: 5 / 7;
-      transform: translate(-50%, -50%) translateY(38%) scale(.94);
-      transform-style: preserve-3d;
-      opacity: 0;
-      overflow: hidden;
-      border-radius: .25rem;
-      background: #fffdf9;
-      box-shadow: 0 25px 45px rgba(70,40,40,.24);
-      transition: transform 1.45s var(--ease), opacity .65s ease;
-      pointer-events: none;
-    }
-
-    .invitation-card img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-
-    .envelope {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      transform-style: preserve-3d;
-      filter: drop-shadow(0 26px 55px rgba(87,53,53,.2));
-      transition: opacity .9s var(--ease), transform .9s var(--ease), filter .9s var(--ease);
-    }
-
-    .envelope-body {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      border-radius: .55rem;
-      background: linear-gradient(145deg, #efcfc8, #e6bdb9);
-      box-shadow: inset 0 0 0 1px rgba(126,75,75,.12);
-    }
-
-    .envelope-body::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(145deg, transparent 49.7%, rgba(128,75,76,.18) 50%, transparent 50.4%);
-      clip-path: polygon(0 0, 50% 53%, 100% 0, 100% 100%, 0 100%);
-    }
-
-    .envelope-body::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(35deg, transparent 49.7%, rgba(128,75,76,.12) 50%, transparent 50.4%);
-      clip-path: polygon(0 100%, 50% 47%, 100% 100%);
-    }
-
-    .flap {
-      position: absolute;
-      z-index: 3;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 61%;
-      transform-origin: 50% 0;
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      background: linear-gradient(150deg, #f6ddd6, #e4b7b3);
-      box-shadow: 0 1px 0 rgba(112,68,68,.12);
-      transition: transform 1.05s var(--ease);
-    }
-
-    .seal {
-      position: absolute;
-      z-index: 5;
-      left: 50%;
-      top: 54%;
-      width: clamp(2.9rem, 10vw, 3.7rem);
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      transform: translate(-50%, -50%);
-      border-radius: 50%;
-      color: #fffaf6;
-      background: var(--rose);
-      border: .28rem solid rgba(255,255,255,.22);
-      box-shadow: 0 5px 13px rgba(100,57,57,.2);
-      font: 1rem Georgia, serif;
-      transition: opacity .35s ease, transform .65s var(--ease);
-    }
-
-    /* One click: open envelope, reveal the centered artwork, then fade the envelope away. */
-    .scene.is-open .flap {
-      transform: rotateX(180deg);
-      z-index: 1;
-    }
-
-    .scene.is-open .seal {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(.5) rotate(20deg);
-      pointer-events: none;
-    }
-
-    .scene.is-open .invitation-card {
-      opacity: 1;
-      transform: translate(-50%, -50%) translateY(-39%) scale(1);
-      transition-delay: .35s;
-    }
-
-    .scene.is-open .envelope {
-      opacity: 0;
-      transform: translateY(45%) scale(.82);
-      filter: blur(4px) drop-shadow(0 26px 55px rgba(87,53,53,.2));
-      transition-delay: 1.05s;
-      pointer-events: none;
-    }
-
-    @media (max-width: 520px) {
-      .stage { width: 92vw; }
-      .invitation-card { width: 67%; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        transition-duration: .01ms !important;
-      }
-    }
+    /* One click: open the flap, slide the artwork upward from inside, then fade the envelope. */
+    .scene.is-open .flap { transform:rotateX(180deg); z-index:1; }
+    .scene.is-open .seal { opacity:0; transform:translate(-50%,-50%) scale(.5) rotate(20deg); pointer-events:none; }
+    .scene.is-open .invitation-card { opacity:1; transform:translate(-50%,-50%) translateY(-42%) scale(1); transition-delay:.25s; z-index:5; }
+    .scene.is-open .envelope { opacity:0; transform:translateY(45%) scale(.82); filter:blur(4px) drop-shadow(0 26px 55px rgba(87,53,53,.2)); transition-delay:1.05s; pointer-events:none; }
+    .scene.is-open { cursor:default; }
+    @media (max-width:520px) { .stage { width:92vw; } .invitation-card { width:67%; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
   </style>
 </head>
 <body>
   <main class="page">
     <div class="stage">
-      <div
-        class="scene"
-        id="scene"
-        role="button"
-        tabindex="0"
-        aria-label="Open the wedding invitation"
-        aria-pressed="false"
-      >
+      <div class="scene" id="scene" role="button" tabindex="0" aria-label="Open the wedding invitation" aria-pressed="false">
         <article class="invitation-card" aria-hidden="true">
           <img src="assets/wedding-cover.jpg" alt="The wedding of Apeksha and Abhinav">
         </article>
-
         <div class="envelope" aria-hidden="true">
           <div class="envelope-body"></div>
           <div class="flap"></div>
@@ -209,19 +51,16 @@
       </div>
     </div>
   </main>
-
   <script>
     (() => {
       const scene = document.getElementById('scene');
       const card = scene.querySelector('.invitation-card');
-
       const openInvitation = () => {
         if (scene.classList.contains('is-open')) return;
         scene.classList.add('is-open');
         scene.setAttribute('aria-pressed', 'true');
         card.setAttribute('aria-hidden', 'false');
       };
-
       scene.addEventListener('click', openInvitation);
       scene.addEventListener('keydown', event => {
         if (event.key === 'Enter' || event.key === ' ') {
