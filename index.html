@@ -3,85 +3,393 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f7f1ec">
+  <meta name="theme-color" content="#f8f3ef">
   <meta name="description" content="An elegant interactive wedding invitation for Apeksha and Abhinav.">
   <title>Apeksha &amp; Abhinav · Wedding Invitation</title>
   <style>
-    :root { --ink:#563d3d; --muted:#8b7270; --rose:#9a6266; --rose-light:#f3d6d1; --paper:#fffdf9; --gold:#bb8d4a; --ease:cubic-bezier(.22,1,.36,1); --page-shadow:0 28px 50px rgba(75,43,44,.2); }
-    * { box-sizing:border-box; } html,body { min-height:100%; }
-    body { margin:0; overflow:hidden; color:var(--ink); font-family:Georgia,'Times New Roman',serif; background:radial-gradient(circle at 12% 8%,rgba(255,255,255,.95),transparent 26rem),radial-gradient(circle at 88% 92%,rgba(236,194,187,.48),transparent 30rem),#f8f2ee; }
-    .page { min-height:100svh; display:grid; place-items:center; padding:clamp(1rem,4vw,2.75rem); isolation:isolate; }
-    .invitation { width:min(100%,64rem); min-height:min(94svh,52rem); display:grid; grid-template-rows:auto minmax(0,1fr) auto; align-items:center; text-align:center; }
-    .heading { padding-top:.25rem; } .eyebrow { margin:0 0 .55rem; color:var(--rose); font:600 .68rem/1.2 system-ui,sans-serif; letter-spacing:.28em; text-transform:uppercase; }
-    h1 { margin:0; color:var(--ink); font-size:clamp(1.8rem,5vw,3.45rem); font-weight:400; letter-spacing:-.035em; line-height:1; }
-    .subheading { margin:.65rem auto 0; color:var(--muted); font-size:clamp(.82rem,1.8vw,1rem); letter-spacing:.03em; }
-    .stage { width:100%; min-height:0; display:grid; place-items:center; perspective:1800px; perspective-origin:50% 44%; position:relative; }
-    .scene { position:relative; width:min(88vw,37rem); height:min(67vw,27rem); min-height:16rem; transform-style:preserve-3d; cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
-    .scene:focus-visible { outline:3px solid rgba(154,98,102,.65); outline-offset:12px; border-radius:1rem; }
-    .envelope { position:absolute; inset:0; z-index:20; transform-style:preserve-3d; filter:drop-shadow(0 28px 55px rgba(87,53,53,.2)); transition:opacity .85s var(--ease),transform .9s var(--ease),filter .9s var(--ease); }
-    .envelope__body { position:absolute; inset:0; overflow:hidden; border-radius:.65rem; background:linear-gradient(145deg,#f0d2cb,#e2b8b3); box-shadow:inset 0 0 0 1px rgba(126,75,75,.14); }
-    .envelope__body::before { content:''; position:absolute; inset:0; background:linear-gradient(145deg,transparent 49.7%,rgba(128,75,76,.2) 50%,transparent 50.4%); clip-path:polygon(0 0,50% 53%,100% 0,100% 100%,0 100%); }
-    .envelope__body::after { content:''; position:absolute; inset:0; background:linear-gradient(35deg,transparent 49.7%,rgba(128,75,76,.14) 50%,transparent 50.4%); clip-path:polygon(0 100%,50% 47%,100% 100%); }
-    .flap { position:absolute; z-index:3; inset:0 0 auto; height:61%; transform-origin:50% 0; clip-path:polygon(0 0,100% 0,50% 100%); background:linear-gradient(150deg,#f7e1db,#e2b6b1); box-shadow:0 1px 0 rgba(112,68,68,.14); transition:transform 1.05s var(--ease); }
-    .seal { position:absolute; z-index:5; left:50%; top:54%; width:clamp(2.8rem,9vw,3.7rem); aspect-ratio:1; display:grid; place-items:center; transform:translate(-50%,-50%); border-radius:50%; color:#fffaf6; background:var(--rose); border:.28rem solid rgba(255,255,255,.24); box-shadow:0 5px 13px rgba(100,57,57,.2); font-size:1.05rem; transition:opacity .35s ease,transform .65s var(--ease); }
-    .book { position:absolute; z-index:4; top:50%; left:50%; width:min(92vw,37rem); aspect-ratio:10 / 7; transform:translate(-50%,-50%) translateY(45%) scale(.76); transform-style:preserve-3d; opacity:0; filter:drop-shadow(var(--page-shadow)); transition:transform 1.25s var(--ease),opacity .7s ease; pointer-events:none; }
-    .spread { position:absolute; inset:0; display:flex; transform-style:preserve-3d; }
-    .page-panel { position:relative; width:50%; height:100%; overflow:hidden; background:var(--paper); border:1px solid rgba(117,69,76,.16); backface-visibility:hidden; }
-    .page-left { border-radius:.38rem 0 0 .38rem; } .page-right { border-radius:0 .38rem .38rem 0; }
-    .page-panel::after { content:''; position:absolute; inset:.45rem; border:1px solid rgba(117,69,76,.14); pointer-events:none; }
-    .page-left::before,.page-right::before { content:''; position:absolute; z-index:2; top:0; bottom:0; width:12%; pointer-events:none; opacity:.45; }
-    .page-left::before { right:0; background:linear-gradient(to left,rgba(63,35,37,.16),transparent); } .page-right::before { left:0; background:linear-gradient(to right,rgba(63,35,37,.16),transparent); }
-    .page-image { display:block; width:100%; height:100%; object-fit:cover; object-position:center; }
-    .cover { position:absolute; z-index:8; top:0; left:25%; width:50%; height:100%; transform-origin:right center; transform-style:preserve-3d; transition:transform 1.35s var(--ease); }
-    .cover__face { position:absolute; inset:0; overflow:hidden; background:var(--paper); border:1px solid rgba(117,69,76,.18); backface-visibility:hidden; }
-    .cover__front { border-radius:.38rem; } .cover__back { transform:rotateY(180deg); border-radius:.38rem 0 0 .38rem; } .cover__face img { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
-    .final-page { position:absolute; z-index:9; top:0; left:25%; width:50%; height:100%; transform-origin:left center; transform:rotateY(90deg); transform-style:preserve-3d; transition:transform 1.25s var(--ease); visibility:hidden; }
-    .final-page__face { position:absolute; inset:0; overflow:hidden; background:var(--paper); border:1px solid rgba(117,69,76,.18); backface-visibility:hidden; border-radius:.38rem; } .final-page__face img { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
-    .instruction { margin:0; min-height:1.2rem; color:var(--muted); font:600 .68rem/1.2 system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase; transition:opacity .35s ease; }
-    .instruction::before { content:'✦  '; color:var(--gold); } .instruction::after { content:'  ✦'; color:var(--gold); }
-    .scene.is-revealed .flap { transform:rotateX(180deg); z-index:1; } .scene.is-revealed .seal { opacity:0; transform:translate(-50%,-50%) scale(.5) rotate(20deg); pointer-events:none; }
-    .scene.is-revealed .book { opacity:1; transform:translate(-50%,-50%) translateY(-38%) scale(.76); transition-delay:.28s; } .scene.is-revealed .envelope { opacity:0; transform:translateY(45%) scale(.82); filter:blur(4px); transition-delay:1.05s; pointer-events:none; }
-    .scene.is-open .book { transform:translate(-50%,-50%) scale(1); } .scene.is-open .cover { transform:rotateY(-180deg); transition-delay:.12s; }
-    .scene.is-final .final-page { visibility:visible; transform:rotateY(0deg); transition-delay:.1s; } .scene.is-final .cover { transform:rotateY(-180deg); } .scene.is-final .spread { opacity:0; transition:opacity .15s ease 1.05s; }
-    @media (max-width:560px) { .invitation { min-height:94svh; } .scene { width:92vw; height:clamp(16rem,64vw,24rem); } .book { width:92vw; } }
-    @media (orientation:landscape) and (max-height:560px) { .invitation { min-height:96svh; } .scene { width:min(86vw,37rem); height:74svh; } }
-    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+    :root {
+      --ink: #533b3b;
+      --muted: #8b7270;
+      --rose: #9b6267;
+      --rose-light: #f1d7d2;
+      --paper: #fffdf9;
+      --gold: #bb8d4a;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.95), transparent 26rem),
+        radial-gradient(circle at 88% 92%, rgba(236,194,187,.48), transparent 30rem),
+        #f8f3ef;
+    }
+
+    .page {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: clamp(1rem, 4vw, 2.75rem);
+    }
+
+    .invitation {
+      width: min(100%, 64rem);
+      min-height: min(94svh, 52rem);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      align-items: center;
+      text-align: center;
+    }
+
+    .heading { padding-top: .25rem; }
+    .eyebrow {
+      margin: 0 0 .55rem;
+      color: var(--rose);
+      font: 600 .68rem/1.2 system-ui, sans-serif;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 3.45rem);
+      font-weight: 400;
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+    .subheading {
+      margin: .65rem auto 0;
+      color: var(--muted);
+      font-size: clamp(.82rem, 1.8vw, 1rem);
+    }
+
+    .stage {
+      width: 100%;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      perspective: 1800px;
+      perspective-origin: 50% 46%;
+    }
+
+    .scene {
+      position: relative;
+      width: min(88vw, 37rem);
+      height: min(67vw, 27rem);
+      min-height: 16rem;
+      transform-style: preserve-3d;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .scene:focus-visible {
+      outline: 3px solid rgba(155,98,103,.65);
+      outline-offset: 12px;
+      border-radius: 1rem;
+    }
+
+    /* The envelope is visually independent from the book so it can disappear without moving the pages. */
+    .envelope {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      transform-style: preserve-3d;
+      filter: drop-shadow(0 28px 55px rgba(87,53,53,.2));
+      transition: opacity .85s var(--ease), transform .9s var(--ease), filter .9s var(--ease);
+    }
+    .envelope__body {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: .65rem;
+      background: linear-gradient(145deg, #f0d2cb, #e2b8b3);
+      box-shadow: inset 0 0 0 1px rgba(126,75,75,.14);
+    }
+    .envelope__body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, transparent 49.7%, rgba(128,75,76,.2) 50%, transparent 50.4%);
+      clip-path: polygon(0 0,50% 53%,100% 0,100% 100%,0 100%);
+    }
+    .envelope__body::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(35deg, transparent 49.7%, rgba(128,75,76,.14) 50%, transparent 50.4%);
+      clip-path: polygon(0 100%,50% 47%,100% 100%);
+    }
+    .flap {
+      position: absolute;
+      z-index: 3;
+      inset: 0 0 auto;
+      height: 61%;
+      transform-origin: 50% 0;
+      clip-path: polygon(0 0,100% 0,50% 100%);
+      background: linear-gradient(150deg,#f7e1db,#e2b6b1);
+      box-shadow: 0 1px 0 rgba(112,68,68,.14);
+      transition: transform 1.05s var(--ease);
+    }
+    .seal {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: 54%;
+      width: clamp(2.8rem,9vw,3.7rem);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      transform: translate(-50%,-50%);
+      border-radius: 50%;
+      color: #fffaf6;
+      background: var(--rose);
+      border: .28rem solid rgba(255,255,255,.24);
+      box-shadow: 0 5px 13px rgba(100,57,57,.2);
+      font-size: 1.05rem;
+      transition: opacity .35s ease, transform .65s var(--ease);
+    }
+
+    /* The open book uses a fixed centered 10:7 spread. Each page is 5:7. */
+    .book {
+      position: absolute;
+      z-index: 5;
+      top: 50%;
+      left: 50%;
+      width: min(92vw, 37rem);
+      aspect-ratio: 10 / 7;
+      transform: translate(-50%,-50%) translateY(40%) scale(.76);
+      transform-style: preserve-3d;
+      opacity: 0;
+      filter: drop-shadow(0 28px 50px rgba(75,43,44,.2));
+      transition: transform 1.2s var(--ease), opacity .65s ease;
+      pointer-events: none;
+    }
+
+    .spread {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      transform-style: preserve-3d;
+      transform-origin: center;
+      transition: opacity .2s ease;
+    }
+    .page-panel,
+    .cover-face,
+    .closing-face {
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid rgba(117,69,76,.17);
+      backface-visibility: hidden;
+    }
+    .page-panel {
+      position: relative;
+      width: 50%;
+      height: 100%;
+    }
+    .page-left { border-radius: .42rem 0 0 .42rem; }
+    .page-right { border-radius: 0 .42rem .42rem 0; }
+    .page-panel::after,
+    .cover-face::after,
+    .closing-face::after {
+      content: '';
+      position: absolute;
+      inset: .42rem;
+      border: 1px solid rgba(117,69,76,.14);
+      pointer-events: none;
+    }
+    .page-left::before,
+    .page-right::before {
+      content: '';
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      bottom: 0;
+      width: 13%;
+      pointer-events: none;
+      opacity: .5;
+    }
+    .page-left::before { right: 0; background: linear-gradient(to left,rgba(63,35,37,.16),transparent); }
+    .page-right::before { left: 0; background: linear-gradient(to right,rgba(63,35,37,.16),transparent); }
+    .page-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* First book action: the only visible page is love 1. */
+    .cover {
+      position: absolute;
+      z-index: 12;
+      top: 0;
+      left: 25%;
+      width: 50%;
+      height: 100%;
+      transform-origin: right center;
+      transform-style: preserve-3d;
+      transition: transform 1.35s var(--ease);
+    }
+    .cover-face {
+      position: absolute;
+      inset: 0;
+    }
+    .cover-front { border-radius: .42rem; }
+    .cover-back { transform: rotateY(180deg); border-radius: .42rem 0 0 .42rem; }
+    .cover-face img { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
+
+    /* Final action: a separate sheet rises from the center and becomes the only visible page: love 2. */
+    .closing {
+      position: absolute;
+      z-index: 15;
+      top: 0;
+      left: 25%;
+      width: 50%;
+      height: 100%;
+      transform-origin: left center;
+      transform-style: preserve-3d;
+      transform: rotateY(90deg);
+      visibility: hidden;
+      transition: transform 1.3s var(--ease), visibility 0s linear 1.3s;
+    }
+    .closing-face {
+      position: absolute;
+      inset: 0;
+      border-radius: .42rem;
+    }
+    .closing-face img { width:100%; height:100%; display:block; object-fit:cover; object-position:center; }
+
+    /* Instructions occupy their own row and never overlap the scene. */
+    .instruction {
+      margin: 0;
+      min-height: 1.2rem;
+      color: var(--muted);
+      font: 600 .68rem/1.2 system-ui,sans-serif;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    .instruction::before { content:'✦  '; color:var(--gold); }
+    .instruction::after { content:'  ✦'; color:var(--gold); }
+
+    /* Click 1: envelope opens, love 1 emerges, envelope fades. */
+    .scene.revealed .flap { transform: rotateX(180deg); z-index: 1; }
+    .scene.revealed .seal { opacity: 0; transform: translate(-50%,-50%) scale(.5) rotate(20deg); pointer-events:none; }
+    .scene.revealed .book { opacity:1; transform: translate(-50%,-50%) translateY(-36%) scale(.76); transition-delay:.28s; }
+    .scene.revealed .envelope { opacity:0; transform:translateY(45%) scale(.82); filter:blur(4px); transition-delay:1.05s; pointer-events:none; }
+
+    /* Click 2: love 1 rotates away around its real right-hand hinge. */
+    .scene.open .book { transform: translate(-50%,-50%) scale(1); }
+    .scene.open .cover { transform: rotateY(-180deg); transition-delay:.08s; }
+
+    /* Click 3: pages fold shut and the final, single love 2 page remains centered. */
+    .scene.closed .closing { visibility:visible; transform:rotateY(0deg); transition-delay:.1s; }
+    .scene.closed .spread { opacity:0; transition-delay:1.08s; }
+    .scene.closed .cover { transform:rotateY(-180deg); }
+
+    @media (max-width:560px) {
+      .invitation { min-height:94svh; }
+      .scene { width:92vw; height:clamp(16rem,64vw,24rem); }
+      .book { width:92vw; }
+    }
+    @media (orientation:landscape) and (max-height:560px) {
+      .invitation { min-height:96svh; }
+      .scene { width:min(86vw,37rem); height:74svh; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; }
+    }
   </style>
 </head>
 <body>
   <main class="page">
     <section class="invitation" aria-label="Interactive wedding invitation">
-      <header class="heading"><p class="eyebrow">A little something special</p><h1>Apeksha &amp; Abhinav</h1><p class="subheading">A celebration of love, family and forever</p></header>
+      <header class="heading">
+        <p class="eyebrow">A little something special</p>
+        <h1>Apeksha &amp; Abhinav</h1>
+        <p class="subheading">A celebration of love, family and forever</p>
+      </header>
+
       <div class="stage">
         <div id="scene" class="scene" role="button" tabindex="0" aria-label="Open the wedding envelope" aria-pressed="false">
           <div class="book" aria-hidden="true">
-            <div class="spread"><section class="page-panel page-left"><img class="page-image" src="love%203%20.png" alt="Wedding invitation inner left page"></section><section class="page-panel page-right"><img class="page-image" src="love%202%20.png" alt="Wedding invitation inner right page"></section></div>
-            <div class="cover"><div class="cover__face cover__front"><img src="love%201%20.png" alt="Wedding invitation front cover"></div><div class="cover__face cover__back"><img src="love%203%20.png" alt="Inside left wedding invitation page"></div></div>
-            <div class="final-page"><div class="final-page__face"><img src="love%203%20.png" alt="Final wedding invitation page"></div></div>
+            <div class="spread">
+              <section class="page-panel page-left" aria-label="Inside left page">
+                <img class="page-image" src="love%203%20.png" alt="Wedding invitation inner left page">
+              </section>
+              <section class="page-panel page-right" aria-label="Inside right page">
+                <img class="page-image" src="love%202%20.png" alt="Wedding invitation inner right page">
+              </section>
+            </div>
+
+            <div class="cover" aria-label="Front cover">
+              <div class="cover-face cover-front"><img src="love%201%20.png" alt="Wedding invitation front cover"></div>
+              <div class="cover-face cover-back"><img src="love%203%20.png" alt="Inside left wedding invitation page"></div>
+            </div>
+
+            <div class="closing" aria-label="Final page">
+              <div class="closing-face"><img src="love%202%20.png" alt="Final wedding invitation page"></div>
+            </div>
           </div>
-          <div class="envelope" aria-hidden="true"><div class="envelope__body"></div><div class="flap"></div><div class="seal">♥</div></div>
+
+          <div class="envelope" aria-hidden="true">
+            <div class="envelope__body"></div>
+            <div class="flap"></div>
+            <div class="seal">♥</div>
+          </div>
         </div>
       </div>
+
       <p id="instruction" class="instruction" aria-live="polite">Click the envelope to open</p>
     </section>
   </main>
+
   <script>
     (() => {
       const scene = document.getElementById('scene');
       const instruction = document.getElementById('instruction');
+      const messages = [
+        'Click the envelope to open',
+        'Click the cover to open the invitation',
+        'Click to fold the invitation closed',
+        'Your invitation is ready'
+      ];
       let step = 0;
       let locked = false;
-      const messages = ['Click the envelope to open','Click the cover to open the invitation','Click to close the invitation','Your invitation is ready'];
-      const advance = () => {
+
+      function advance() {
         if (locked || step >= 3) return;
-        locked = true; step += 1;
-        if (step === 1) { scene.classList.add('is-revealed'); scene.setAttribute('aria-label','Open the wedding invitation cover'); window.setTimeout(() => { locked = false; }, 1700); }
-        else if (step === 2) { scene.classList.add('is-open'); scene.setAttribute('aria-label','Close the wedding invitation'); window.setTimeout(() => { locked = false; }, 1500); }
-        else { scene.classList.add('is-final'); scene.setAttribute('aria-label','Final wedding invitation page'); window.setTimeout(() => { locked = false; }, 1400); }
-        instruction.textContent = messages[step]; scene.setAttribute('aria-pressed','true');
-      };
+        locked = true;
+        step += 1;
+
+        if (step === 1) {
+          scene.classList.add('revealed');
+          scene.setAttribute('aria-label', 'Open the wedding invitation cover');
+          window.setTimeout(() => { locked = false; }, 1750);
+        } else if (step === 2) {
+          scene.classList.add('open');
+          scene.setAttribute('aria-label', 'Fold the wedding invitation closed');
+          window.setTimeout(() => { locked = false; }, 1500);
+        } else {
+          scene.classList.add('closed');
+          scene.setAttribute('aria-label', 'Final wedding invitation page');
+          window.setTimeout(() => { locked = false; }, 1500);
+        }
+
+        instruction.textContent = messages[step];
+        scene.setAttribute('aria-pressed', 'true');
+      }
+
       scene.addEventListener('click', advance);
-      scene.addEventListener('keydown', event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); advance(); } });
+      scene.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          advance();
+        }
+      });
     })();
   </script>
 </body>
